@@ -1,61 +1,75 @@
-![sphere_gif](https://github.com/user-attachments/assets/2ec97f51-a935-40b0-a659-4e0433c2c40b)
+# NOVA API
 
+## Testing with Postman
 
-# 🌌 NOVA - Networked Operations for Virtualized Architectures 🚀
+### Quick Setup
 
-Welcome to **NOVA**, a secure and modular RESTful API deployment project built for interstellar scalability. Designed as a mission-critical system architecture, NOVA leverages a tri-server infrastructure to deliver fast, secure, and reliable service communication across a distributed network.
+1. Start the server: `npm run dev`
+2. Import `postman-collection.json` into Postman
+3. Set the `baseUrl` variable to `http://localhost:3000` (should be set by default)
 
-## ✨ Project Overview
+### Manual Testing
 
-This project is a part of a system administration and deployment assignment where the goal is to:
+#### 1. Status Check
 
-- Build a simple REST API with CRUD functionality.
-- Deploy it on a secured three-server environment.
-- Document and structure the deployment with best practices.
+- **GET** `http://localhost:3000/api/status`
+- Expected: `200 OK` with `{"status": "ok"}`
 
----
+#### 2. Get All Items
 
-## 🌠 Features
+- **GET** `http://localhost:3000/api/items`
+- Expected: `200 OK` with array of items
 
-- **🚦 RESTful API Endpoints**
+#### 3. Create New Item
 
-  - `GET /status` - Check system health
-  - `GET /items` - Retrieve item list
-  - `POST /items` - Add a new item
-  - `DELETE /items/:id` - Delete item by ID
+- **POST** `http://localhost:3000/api/items`
+- Headers: `Content-Type: application/json`
+- Body:
 
-- **🛡️ Middleware**
-
-  - Logs all route requests with timestamps to `/var/logs`.
-
-- **💾 Database**
-
-  - MongoDB instance hosted securely and accessible only by the API server.
-
-- **🛰️ Server Topology**
-  - 3 virtual machines:
-    - **API Server** - Hosts the REST API (Port 80)
-    - **Database Server** - Runs MongoDB
-    - **Document Server** - Manages shared logs and documentation via NFS
-
----
-
-## 🧰 Technologies
-
-- **Node.js / Express**
-- **MongoDB**
-- **Nginx / Systemd / NFS**
-- **Linux (Debian-based)**
-- **GitHub** for version control and collaboration
-
----
-
-## 🗺️ Architecture
-
-```plaintext
-+-------------+       +----------------+       +------------------+
-| API Server  | <---> | Database Server| <---> | Document Server  |
-| 10.12.X.201 |       | 10.12.X.202     |       | 10.12.X.203       |
-+-------------+       +----------------+       +------------------+
+```json
+{
+  "name": "My Test Item",
+  "description": "Test description"
+}
 ```
-# NOVA
+
+- Expected: `201 Created` with created item
+
+#### 4. Create Item with Validation Error
+
+- **POST** `http://localhost:3000/api/items`
+- Body:
+
+```json
+{
+  "name": "",
+  "description": 123
+}
+```
+
+- Expected: `400 Bad Request` with validation errors
+
+#### 5. Delete Item
+
+- **DELETE** `http://localhost:3000/api/items/{id}`
+- Replace `{id}` with actual item ID (e.g., "1")
+- Expected: `204 No Content`
+
+#### 6. Delete Non-existent Item
+
+- **DELETE** `http://localhost:3000/api/items/999`
+- Expected: `404 Not Found`
+
+### Expected Status Codes
+
+- `200` - Success with data
+- `201` - Created successfully
+- `204` - Success with no content
+- `400` - Bad request (validation errors)
+- `404` - Not found
+- `500` - Server error
+
+### Log Verification
+
+Check `/var/logs/api.log` to verify requests are being logged with format:
+`HH:MM:SS.DD.MM.YYYY - /api/endpoint`
