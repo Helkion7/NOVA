@@ -1,3 +1,6 @@
+![sphere_gif](https://github.com/user-attachments/assets/2ec97f51-a935-40b0-a659-4e0433c2c40b)
+
+
 # 🌌 NOVA - Networked Operations for Virtualized Architectures 🚀
 
 Welcome to **NOVA**, a secure and modular RESTful API deployment project built for interstellar scalability. Designed as a mission-critical system architecture, NOVA leverages a tri-server infrastructure to deliver fast, secure, and reliable service communication across a distributed network.
